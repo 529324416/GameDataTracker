@@ -4,11 +4,14 @@
 
 import flask
 from flask import Flask
-
 from gevent import monkey, pywsgi
 monkey.patch_all()
 
+import config
+import data
+
 app = Flask(__name__)
+data_uploader = None
 
 
 def failed(message:str) -> str:
@@ -45,10 +48,23 @@ def upload_guide_mission_data(version:str, missionId:str) -> str:
     day_receive = client_data.get("rd")
     day_finish = client_data.get("fd")
 
-    print(f"receive data:{day_receive},{day_finish},{version},{missionId}")
+    data_uploader
     return success()
 
 if __name__ == '__main__':
 
-    server = pywsgi.WSGIServer(("localhost", 8688), app)
-    server.serve_forever()
+    filepath = "./config.json"
+    data_tracker_cfg = config.load_tracker_config(filepath)
+    if data_tracker_cfg is None:
+        print("app run failed..")
+        print("config file missing..")
+
+    else:
+        data_uploader = data.create_data_uploader(data_tracker_cfg.dblink)
+        if data_uploader is None:
+            print("app run failed..")
+            print("connect to mongodb failed..")
+        else:
+            server = pywsgi.WSGIServer(data_tracker_cfg.server_address, app)
+            print(f"start to run app on {data_tracker_cfg.server_address}")
+            server.serve_forever()

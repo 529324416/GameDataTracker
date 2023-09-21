@@ -1,3 +1,5 @@
 {
-    "dblink":"mongodb://127.0.0.1:27017"
+    "dblink":"mongodb://127.0.0.1:27017",
+    "server_host":"localhost",
+    "server_port":8688
 }
