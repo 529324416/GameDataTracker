@@ -48,7 +48,12 @@ def upload_guide_mission_data(version:str, missionId:str) -> str:
     day_receive = client_data.get("rd")
     day_finish = client_data.get("fd")
 
-    data_uploader
+    if not isinstance(day_receive, int):
+        return failed("'rd' should be int type")
+    if not isinstance(day_finish, int):
+        return failed("'fd' should be int type")
+
+    data_uploader.upload_guide_mission_data(version, missionId, day_receive, day_finish)
     return success()
 
 if __name__ == '__main__':
