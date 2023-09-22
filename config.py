@@ -5,6 +5,8 @@ class GameDataTrackerConfig:
         
     def __init__(self, dblink:str, server_host:str, server_port:int) -> None:
         
+        self.__host = server_host
+        self.__port = server_port
         self.__server_address = (server_host, server_port)
         self.__dblink = dblink
 
@@ -17,6 +19,10 @@ class GameDataTrackerConfig:
     @property
     def server_address(self) -> tuple:
         return self.__server_address
+    
+    @property
+    def server_link(self) -> str:
+        return f"http://{self.__host}:{self.__port}"
     
 
 def load_tracker_config(filepath:str) -> GameDataTrackerConfig:

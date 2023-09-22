@@ -9,10 +9,10 @@ monkey.patch_all()
 
 import config
 import data
+import logSystem
 
 app = Flask(__name__)
 data_uploader = None
-
 
 def failed(message:str) -> str:
     return flask.jsonify({
@@ -58,19 +58,32 @@ def upload_guide_mission_data(version:str, missionId:str) -> str:
         return success()
     return failed("failed to insert data")
 
-if __name__ == '__main__':
 
-    filepath = "./config.json"
-    data_tracker_cfg = config.load_tracker_config(filepath)
+def main(config_path:str) -> None:
+    '''run application'''
+
+    data_tracker_cfg = config.load_tracker_config(config_path)
     if data_tracker_cfg is None:
-        print("app run failed..")
         print("config file missing..")
-    else:
-        data_uploader = data.create_data_uploader(data_tracker_cfg.dblink)
-        if data_uploader is None:
-            print("app run failed..")
-            print("connect to mongodb failed..")
-        else:
-            server = pywsgi.WSGIServer(data_tracker_cfg.server_address, app)
-            print(f"start to run app on {data_tracker_cfg.server_address}")
-            server.serve_forever()
+        print("app run failed..")
+        return
+    
+    logger = logSystem.create_logger("./tracker.log")
+    if logger is None:
+        print("create logger system failed")
+        print("app run failed..")
+        return
+    
+
+    data_uploader = data.create_data_uploader(data_tracker_cfg.dblink, logger)
+    if data_uploader is None:
+        print("connect to mongodb failed..")
+        return
+    
+    print(f"run app at {data_tracker_cfg.server_link}")
+    server = pywsgi.WSGIServer(data_tracker_cfg.server_address, app)
+    server.serve_forever()
+
+
+if __name__ == '__main__':
+    main("./config.json")
