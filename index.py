@@ -53,8 +53,10 @@ def upload_guide_mission_data(version:str, missionId:str) -> str:
     if not isinstance(day_finish, int):
         return failed("'fd' should be int type")
 
-    data_uploader.upload_guide_mission_data(version, missionId, day_receive, day_finish)
-    return success()
+    result = data_uploader.upload_guide_mission_data(version, missionId, day_receive, day_finish)
+    if result:
+        return success()
+    return failed("failed to insert data")
 
 if __name__ == '__main__':
 
@@ -63,7 +65,6 @@ if __name__ == '__main__':
     if data_tracker_cfg is None:
         print("app run failed..")
         print("config file missing..")
-
     else:
         data_uploader = data.create_data_uploader(data_tracker_cfg.dblink)
         if data_uploader is None:
