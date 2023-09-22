@@ -20,9 +20,7 @@ class GameDataTrackerUploader:
             "type":"guide_mission",
             "data":(version, missionId, start_day, end_day)
         })
-        if time.time() - self.time > 10:
-            self.time = time.time()
-            self._upload()
+        self.upload_check()
     
     def upload_check(self):
         '''upload check data'''
@@ -31,6 +29,14 @@ class GameDataTrackerUploader:
             self.time = time.time()
             self._upload()
 
+    def dump_datas(self) -> list:
+        '''dump all data in queue'''
+
+        datas = []
+        while not self.queue.empty():
+            datas.append(self.queue.get())
+        return datas
+
     def _upload(self):
         '''run a thread to do upload'''
 
@@ -38,7 +44,8 @@ class GameDataTrackerUploader:
             logging.warning("waiting for last upload mission finished")
             return
         self.__is_uploading = True
-        thread = threading.Thread(target=self.__upload_thread)
+        self.datas = self.dump_datas()
+        thread = threading.Thread(target=self.__upload_thread, args=(self.datas, ))
         thread.start()
 
     def __upload_thread(self, datas: iter) -> None:

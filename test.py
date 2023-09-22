@@ -6,6 +6,7 @@ data = {
     "fd":12
 }
 
-
-result = requests.post("http://localhost:8688/upload/missionGuide/0.8.1.014.07/guide_test", json=data, verify=False, timeout=10)
+link_local = "http://localhost:80/upload/missionGuide/0.8.1.014.07/guide_test"
+link_cloud = "http://60.204.171.248/upload/missionGuide/0.8.1.014.07/guide_test"
+result = requests.post(link_local, json=data, verify=False, timeout=10)
 print(result.content)

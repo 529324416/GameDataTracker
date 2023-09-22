@@ -53,10 +53,8 @@ def upload_guide_mission_data(version:str, missionId:str) -> str:
     if not isinstance(day_finish, int):
         return failed("'fd' should be int type")
 
-    result = data_uploader.upload_guide_mission_data(version, missionId, day_receive, day_finish)
-    if result:
-        return success()
-    return failed("failed to insert data")
+    data_uploader.upload_guide_mission_data(version, missionId, day_receive, day_finish)
+    return success()
 
 
 def main(config_path:str) -> None:
@@ -74,7 +72,7 @@ def main(config_path:str) -> None:
         print("app run failed..")
         return
     
-
+    global data_uploader
     data_uploader = data.create_data_uploader(data_tracker_cfg.dblink, logger)
     if data_uploader is None:
         print("connect to mongodb failed..")

@@ -1,0 +1,3 @@
+2023-09-22 18:23:33,575 WARNING waiting for last upload mission finished
+2023-09-22 18:23:44,339 WARNING waiting for last upload mission finished
+2023-09-22 18:23:47,493 ERROR insert data failed: 0.0.0.0:28814: [Errno 10049] [WinError 10049] 在其上下文中，该请求的地址无效。, Timeout: 30s, Topology Description: <TopologyDescription id: 650d6acfd97d87326d3e2753, topology_type: Unknown, servers: [<ServerDescription ('0.0.0.0', 28814) server_type: Unknown, rtt: None, error=AutoReconnect('0.0.0.0:28814: [Errno 10049] [WinError 10049] 在其上下文中，该请求的地址无效。')>]>
