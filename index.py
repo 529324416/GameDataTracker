@@ -26,7 +26,7 @@ def success():
     }), 200
 
 
-@app.route("/upload/missionGuide/<version>/<missionId>/", methods = ["POST"])
+@app.route("/upload/missionGuide/<version>/<missionId>/", methods = ["GET", "POST"])
 def upload_guide_mission_data(version:str, missionId:str) -> str:
     '''引导任务数据上传接口
     @version: 当前上传的游戏版本
